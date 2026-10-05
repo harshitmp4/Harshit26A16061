@@ -1,20 +1,60 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ugv">
 
-  <!-- Chassis dimensions in metres -->
+  <!-- Chassis dimensions (metres) -->
   <xacro:property name="chassis_length" value="0.40"/>
   <xacro:property name="chassis_width"  value="0.25"/>
   <xacro:property name="chassis_height" value="0.10"/>
 
+  <!-- Wheel dimensions and placement (metres) -->
+  <xacro:property name="wheel_radius" value="0.05"/>
+  <xacro:property name="wheel_width"  value="0.04"/>
+  <xacro:property name="wheel_x"      value="0.15"/>
+  <xacro:property name="wheel_y"      value="${chassis_width/2 + wheel_width/2}"/>
+  <xacro:property name="wheel_z"      value="-0.03"/>
+
+  <!-- Colours -->
+  <material name="chassis_blue">
+    <color rgba="0.1 0.3 0.8 1.0"/>
+  </material>
+  <material name="wheel_black">
+    <color rgba="0.1 0.1 0.1 1.0"/>
+  </material>
+
+  <!-- Chassis -->
   <link name="base_link">
     <visual>
       <geometry>
         <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
       </geometry>
-      <material name="chassis_blue">
-        <color rgba="0.1 0.3 0.8 1.0"/>
-      </material>
+      <material name="chassis_blue"/>
     </visual>
   </link>
+
+  <!-- Wheel template: one link + one joint -->
+  <xacro:macro name="wheel" params="name x y">
+    <link name="${name}_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <material name="wheel_black"/>
+      </visual>
+    </link>
+
+    <joint name="${name}_wheel_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}_wheel"/>
+      <origin xyz="${x} ${y} ${wheel_z}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <!-- Create the four wheels from the template -->
+  <xacro:wheel name="front_left"  x="${wheel_x}"  y="${wheel_y}"/>
+  <xacro:wheel name="front_right" x="${wheel_x}"  y="${-wheel_y}"/>
+  <xacro:wheel name="rear_left"   x="${-wheel_x}" y="${wheel_y}"/>
+  <xacro:wheel name="rear_right"  x="${-wheel_x}" y="${-wheel_y}"/>
 
 </robot>
