@@ -20,6 +20,9 @@
   <material name="wheel_black">
     <color rgba="0.1 0.1 0.1 1.0"/>
   </material>
+  <material name="wheel_marker">
+    <color rgba="1.0 0.5 0.0 1.0"/>
+  </material>
 
   <!-- Chassis -->
   <link name="base_link">
@@ -34,12 +37,21 @@
   <!-- Wheel template: one link + one joint -->
   <xacro:macro name="wheel" params="name x y">
     <link name="${name}_wheel">
+      <!-- Tyre -->
       <visual>
         <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
         <geometry>
           <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
         </geometry>
         <material name="wheel_black"/>
+      </visual>
+      <!-- Orange bar sticking out of both faces so rotation is visible -->
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${wheel_radius*1.8} ${wheel_width+0.02} 0.02"/>
+        </geometry>
+        <material name="wheel_marker"/>
       </visual>
     </link>
 
