@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'ugv_controller = ugv_control.ugv_controller:main',
         ],
     },
 )
