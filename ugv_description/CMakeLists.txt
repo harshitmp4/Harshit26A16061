@@ -11,7 +11,7 @@ find_package(rclpy REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
-install(DIRECTORY urdf launch meshes
+install(DIRECTORY urdf launch config meshes
   DESTINATION share/${PROJECT_NAME}/
 )
 
