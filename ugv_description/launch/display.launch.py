@@ -8,6 +8,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     pkg_share = get_package_share_directory('ugv_description')
     xacro_file = os.path.join(pkg_share, 'urdf', 'ugv.urdf.xacro')
+    rviz_config = os.path.join(pkg_share, 'config', 'ugv.rviz')
     robot_description = xacro.process_file(xacro_file).toxml()
 
     return LaunchDescription([
@@ -23,5 +24,6 @@ def generate_launch_description():
         Node(
             package='rviz2',
             executable='rviz2',
+            arguments=['-d', rviz_config],
         ),
     ])
